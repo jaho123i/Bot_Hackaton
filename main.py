@@ -1,6 +1,5 @@
 import random
 
-
 class Pole:
     def __init__(self, x, y):
         self.y = y
@@ -11,7 +10,7 @@ class Pole:
 class Agent:
     def __init__(self):
         self.strefy = [Strefa(0,0,5,4), Strefa(6,0,11,4), Strefa(0,5,5,9), Strefa(6,5,11,9)]
-        self.pola = [[0]*12]*10
+        self.pola = [[0]*10]*12
         for poziom in range(len(self.pola)):
             for pole in range(len(self.pola[poziom])):
                 self.pola[poziom][pole] = Pole(pole, poziom)
@@ -21,7 +20,7 @@ class Agent:
 
     def next_move(self, game_state, player_state):
         actions = ['', 'u', 'd', 'l', 'r', 'p']
-        self.wspolczynik_stref(game_state, player_state)
+        self.przelicz_wszystkie_wspolczyniki_pol(game_state, player_state)
         return random.choice(actions)
 
     def wspolczynik_stref(self, game_state, player_state):
@@ -53,34 +52,42 @@ class Agent:
             print(f'Współczynnik dla strefy {strefa.x}, {strefa.y}: {strefa.wsp}')
         print('\n')
 
-    def wspolczynik_pola(self, game_state, player_state):
-        for pole in self.strefy:
-            pole.wsp = 0
-            print(f'Wyzerowano: {pole.wsp}')
+    def przelicz_wszystkie_wspolczyniki_pol(self, game_state, player_state):
+        for poziom in self.pola:
+            for pole in poziom:
+                pole.wsp = 0
+                print(f'Wyzerowano: {pole.wsp}')
         for i in game_state.soft_blocks:
-            for pole in self.strefy:
-                if pole.x <= i[0] <= pole.X and pole.y <= i[1] <= pole.Y:
-                    pole.wsp += 5
-                    print(f'Dodaję 5 do strefy: {pole.x}, {pole.y} za {i[0]}, {i[1]}')
+            for X in range(-1, 2):
+                for Y in range(-1, 2):
+                    if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
+                        self.pola[i[0]+X][i[1]+Y].wsp += 5
+                        print(f'Dodaję 5 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ore_blocks:
-            for pole in self.strefy:
-                if pole.x <= i[0] <= pole.X and pole.y <= i[1] <= pole.Y:
-                    pole.wsp += 3
-                    print(f'Dodaję 3 do strefy: {pole.x}, {pole.y} za {i[0]}, {i[1]}')
+            for X in range(-1, 2):
+                for Y in range(-1, 2):
+                    if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
+                        self.pola[i[0]+X][i[1]+Y].wsp += 3
+                        print(f'Dodaję 3 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ammo:
-            for pole in self.strefy:
-                if pole.x <= i[0] <= pole.X and pole.y <= i[1] <= pole.Y:
-                    pole.wsp += 7
-                    print(f'Dodaję 7 do strefy: {pole.x}, {pole.y} za {i[0]}, {i[1]}')
+            for X in range(-1, 2):
+                for Y in range(-1, 2):
+                    if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
+                        self.pola[i[0]+X][i[1]+Y].wsp += 7
+                        print(f'Dodaję 7 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.indestructible_blocks:
-            for pole in self.strefy:
-                if pole.x <= i[0] <= pole.X and pole.y <= i[1] <= pole.Y:
-                    pole.wsp += -2
-                    print(f'Dodaję -2 do strefy: {pole.x}, {pole.y} za {i[0]}, {i[1]}')
+            for X in range(-1, 2):
+                for Y in range(-1, 2):
+                    if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
+                        self.pola[i[0]+X][i[1]+Y].wsp += -2
+                        print(f'Dodaję -2 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+                        print(self.pola[i[0]+X][i[1]+Y].wsp)
 
-        for pole in self.strefy:
-            print(f'Współczynnik dla strefy {pole.x}, {pole.y}: {pole.wsp}')
-        print('\n')
+        for poziom in range(len(self.pola)):
+            for pole in range(len(self.pola[poziom])):
+                print(f'[{self.pola[poziom][pole].wsp}]', end=' ')
+            print()
+
 
 
 class Strefa:
