@@ -10,7 +10,7 @@ class Pole:
 class Agent:
     def __init__(self):
         self.strefy = [Strefa(0,0,5,4), Strefa(6,0,11,4), Strefa(0,5,5,9), Strefa(6,5,11,9)]
-        self.pola = [[0]*10]*12
+        self.pola = [[0]*12]*10
         for poziom in range(len(self.pola)):
             for pole in range(len(self.pola[poziom])):
                 self.pola[poziom][pole] = Pole(pole, poziom)
@@ -61,27 +61,26 @@ class Agent:
             for X in range(-1, 2):
                 for Y in range(-1, 2):
                     if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[0]+X][i[1]+Y].wsp += 5
+                        self.pola[i[1]+Y][i[0]+X].wsp += 5
                         print(f'Dodaję 5 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ore_blocks:
             for X in range(-1, 2):
                 for Y in range(-1, 2):
                     if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[0]+X][i[1]+Y].wsp += 3
+                        self.pola[i[1]+Y][i[0]+X].wsp += 3
                         print(f'Dodaję 3 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ammo:
             for X in range(-1, 2):
                 for Y in range(-1, 2):
                     if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[0]+X][i[1]+Y].wsp += 7
+                        self.pola[i[1]+Y][i[0]+X].wsp += 7
                         print(f'Dodaję 7 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.indestructible_blocks:
             for X in range(-1, 2):
                 for Y in range(-1, 2):
                     if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[0]+X][i[1]+Y].wsp += -2
+                        self.pola[i[1]+Y][i[0]+X].wsp += -2
                         print(f'Dodaję -2 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
-                        print(self.pola[i[0]+X][i[1]+Y].wsp)
 
         for poziom in range(len(self.pola)):
             for pole in range(len(self.pola[poziom])):
