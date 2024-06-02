@@ -99,6 +99,7 @@ class Agent:
                     self.pola[i[1]+Y][i[0]].wsp += -20
                     print(f'Dodaję -20 do pola: ({[i[0]]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
 
+
         for row in self.pola[::-1]:
             for block in row:
                 print("[",  block.wsp,  "]", end=" ")
