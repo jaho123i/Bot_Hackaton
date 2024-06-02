@@ -1,10 +1,11 @@
 import random
 
+
 class Pole:
     def __init__(self, x, y):
         self.y = int(y)
         self.x = int(x)
-        self.wsp = int(x)*int(y)
+        self.wsp = int(x) * int(y)
 
 
 class Agent:
@@ -17,9 +18,14 @@ class Agent:
                 print(f'[{self.pola[poziom][pole].wsp}]', end=' ')
             print()
 
+        self.ID = 0
 
     def next_move(self, game_state, player_state):
         actions = ['', 'u', 'd', 'l', 'r', 'p']
+
+        if game_state.tick_number < 5:
+            self.ID = player_state.id
+
         self.przelicz_wszystkie_wspolczyniki_pol(game_state, player_state)
 
         return random.choice(actions)
@@ -59,52 +65,60 @@ class Agent:
                 pole.wsp = 0
                 print(f'Wyzerowano: {pole.wsp}')
         for i in game_state.soft_blocks:
-            for X in range(-2, 3):
-                if game_state.is_in_bounds((i[0]+X,i[1])):
-                    (self.pola[i[1]][i[0]+X]).wsp += 5
-                    print(f'Dodaję 5 do pola: ({[i[0]+X]},{[i[1]]}) za {i[0]}, {i[1]}')
-            for Y in range(-2, 3):
-                if game_state.is_in_bounds((i[0],i[1]+Y)):
-                    self.pola[i[1]+Y][i[0]].wsp += 5
-                    print(f'Dodaję 5 do pola: ({[i[0]]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+            if 4 >= i[0] - player_state.location[0] >= -4 and 4 >= i[1] - player_state.location[1] >= -4:
+                for X in range(-2, 3):
+                    if game_state.is_in_bounds((i[0] + X, i[1])):
+                        (self.pola[i[1]][i[0] + X]).wsp += 5
+                        print(f'Dodaję 5 do pola: ({[i[0] + X]},{[i[1]]}) za {i[0]}, {i[1]}')
+                for Y in range(-2, 3):
+                    if game_state.is_in_bounds((i[0], i[1] + Y)):
+                        self.pola[i[1] + Y][i[0]].wsp += 5
+                        print(f'Dodaję 5 do pola: ({[i[0]]},{[i[1] + Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ore_blocks:
-            for X in range(-2, 3):
-                if game_state.is_in_bounds((i[0]+X,i[1])):
-                    (self.pola[i[1]][i[0]+X]).wsp += 3
-                    print(f'Dodaję 3 do pola: ({[i[0]+X]},{[i[1]]}) za {i[0]}, {i[1]}')
-            for Y in range(-2, 3):
-                if game_state.is_in_bounds((i[0],i[1]+Y)):
-                    self.pola[i[1]+Y][i[0]].wsp += 3
-                    print(f'Dodaję 3 do pola: ({[i[0]]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+            if 4 >= i[0] - player_state.location[0] >= -4 and 4 >= i[1] - player_state.location[1] >= -4:
+                for X in range(-2, 3):
+                    if game_state.is_in_bounds((i[0] + X, i[1])):
+                        (self.pola[i[1]][i[0] + X]).wsp += 3
+                        print(f'Dodaję 3 do pola: ({[i[0] + X]},{[i[1]]}) za {i[0]}, {i[1]}')
+                for Y in range(-2, 3):
+                    if game_state.is_in_bounds((i[0], i[1] + Y)):
+                        self.pola[i[1] + Y][i[0]].wsp += 3
+                        print(f'Dodaję 3 do pola: ({[i[0]]},{[i[1] + Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ammo:
-            if game_state.is_in_bounds((i[0],i[1])):
-                self.pola[i[1]][i[0]].wsp += 20
-                print(f'Dodaję 20 do pola: ({[i[0]]},{[i[1]]}) za {i[0]}, {i[1]}')
+            if 4 >= i[0] - player_state.location[0] >= -4 and 4 >= i[1] - player_state.location[1] >= -4:
+                if game_state.is_in_bounds((i[0], i[1])):
+                    self.pola[i[1]][i[0]].wsp += 20
+                    print(f'Dodaję 20 do pola: ({[i[0]]},{[i[1]]}) za {i[0]}, {i[1]}')
         for i in game_state.indestructible_blocks:
-            for X in range(-1, 2):
-                if game_state.is_in_bounds((i[0]+X,i[1])):
-                    (self.pola[i[1]][i[0]+X]).wsp += -2
-                    print(f'Dodaję -2 do pola: ({[i[0]+X]},{[i[1]]}) za {i[0]}, {i[1]}')
-            for Y in range(-1, 2):
-                if game_state.is_in_bounds((i[0],i[1]+Y)):
-                    self.pola[i[1]+Y][i[0]].wsp += -2
-                    print(f'Dodaję -2 do pola: ({[i[0]]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+            if 4 >= i[0] - player_state.location[0] >= -4 and 4 >= i[1] - player_state.location[1] >= -4:
+                for X in range(-1, 2):
+                    if game_state.is_in_bounds((i[0] + X, i[1])):
+                        (self.pola[i[1]][i[0] + X]).wsp += -2
+                        print(f'Dodaję -2 do pola: ({[i[0] + X]},{[i[1]]}) za {i[0]}, {i[1]}')
+                for Y in range(-1, 2):
+                    if game_state.is_in_bounds((i[0], i[1] + Y)):
+                        self.pola[i[1] + Y][i[0]].wsp += -2
+                        print(f'Dodaję -2 do pola: ({[i[0]]},{[i[1] + Y]}) za {i[0]}, {i[1]}')
         for i in game_state.bombs:
-            for X in range(-2, 3):
-                if game_state.is_in_bounds((i[0]+X,i[1])):
-                    (self.pola[i[1]][i[0]+X]).wsp += -20
-                    print(f'Dodaję -20 do pola: ({[i[0]+X]},{[i[1]]}) za {i[0]}, {i[1]}')
-            for Y in range(-2, 3):
-                if game_state.is_in_bounds((i[0],i[1]+Y)):
-                    self.pola[i[1]+Y][i[0]].wsp += -20
-                    print(f'Dodaję -20 do pola: ({[i[0]]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
-
+            if 4 >= i[0] - player_state.location[0] >= -4 and 4 >= i[1] - player_state.location[1] >= -4:
+                for X in range(-2, 3):
+                    if game_state.is_in_bounds((i[0] + X, i[1])):
+                        (self.pola[i[1]][i[0] + X]).wsp += -20
+                        print(f'Dodaję -20 do pola: ({[i[0] + X]},{[i[1]]}) za {i[0]}, {i[1]}')
+                for Y in range(-2, 3):
+                    if game_state.is_in_bounds((i[0], i[1] + Y)):
+                        self.pola[i[1] + Y][i[0]].wsp += -20
+                        print(f'Dodaję -20 do pola: ({[i[0]]},{[i[1] + Y]}) za {i[0]}, {i[1]}')
+        for i in game_state.treasure:
+            if 4 >= i[0] - player_state.location[0] >= -4 and 4 >= i[1] - player_state.location[1] >= -4:
+                if game_state.is_in_bounds((i[0], i[1])):
+                    self.pola[i[1]][i[0]].wsp += 8
+                    print(f'Dodaję 8 do pola: ({[i[0]]},{[i[1]]}) za {i[0]}, {i[1]}')
 
         for row in self.pola[::-1]:
             for block in row:
-                print("[",  block.wsp,  "]", end=" ")
+                print("[", block.wsp, "]", end=" ")
             print()
-
 
 
 class Strefa:
