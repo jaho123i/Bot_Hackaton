@@ -2,15 +2,15 @@ import random
 
 class Pole:
     def __init__(self, x, y):
-        self.y = y
-        self.x = x
-        self.wsp = 0
+        self.y = int(y)
+        self.x = int(x)
+        self.wsp = int(x)*int(y)
 
 
 class Agent:
     def __init__(self):
-        self.strefy = [Strefa(0,0,5,4), Strefa(6,0,11,4), Strefa(0,5,5,9), Strefa(6,5,11,9)]
-        self.pola = [[0]*12]*10
+        # self.strefy = [Strefa(0,0,5,4), Strefa(6,0,11,4), Strefa(0,5,5,9), Strefa(6,5,11,9)]
+        self.pola = [[0 for _ in range(12)] for _ in range(10)]
         for poziom in range(len(self.pola)):
             for pole in range(len(self.pola[poziom])):
                 self.pola[poziom][pole] = Pole(pole, poziom)
@@ -21,6 +21,7 @@ class Agent:
     def next_move(self, game_state, player_state):
         actions = ['', 'u', 'd', 'l', 'r', 'p']
         self.przelicz_wszystkie_wspolczyniki_pol(game_state, player_state)
+
         return random.choice(actions)
 
     def wspolczynik_stref(self, game_state, player_state):
@@ -62,6 +63,7 @@ class Agent:
                 for Y in range(-1, 2):
                     if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
                         self.pola[i[1]+Y][i[0]+X].wsp += 5
+                        print(self.pola[i[1]+Y][i[0]+X].wsp)
                         print(f'Dodaję 5 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ore_blocks:
             for X in range(-1, 2):
@@ -73,18 +75,17 @@ class Agent:
             for X in range(-1, 2):
                 for Y in range(-1, 2):
                     if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[1]+Y][i[0]+X].wsp += 7
-                        print(f'Dodaję 7 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+                        self.pola[i[1]+Y][i[0]+X].wsp += 20
+                        print(f'Dodaję 20 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.indestructible_blocks:
             for X in range(-1, 2):
                 for Y in range(-1, 2):
                     if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[1]+Y][i[0]+X].wsp += -2
+                        (self.pola[i[1]+Y][i[0]+X]).wsp += -2
                         print(f'Dodaję -2 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
-
-        for poziom in range(len(self.pola)):
-            for pole in range(len(self.pola[poziom])):
-                print(f'[{self.pola[poziom][pole].wsp}]', end=' ')
+        for row in self.pola[::-1]:
+            for block in row:
+                print("[",  block.wsp,  "]", end=" ")
             print()
 
 
