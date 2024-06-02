@@ -59,28 +59,36 @@ class Agent:
                 pole.wsp = 0
                 print(f'Wyzerowano: {pole.wsp}')
         for i in game_state.soft_blocks:
-            for X in range(-1, 2):
-                for Y in range(-1, 2):
-                    if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[1]+Y][i[0]+X].wsp += 5
-                        print(self.pola[i[1]+Y][i[0]+X].wsp)
-                        print(f'Dodaję 5 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+            for X in range(-2, 3):
+                if game_state.is_in_bounds((i[0]+X,i[1])):
+                    (self.pola[i[1]][i[0]+X]).wsp += 5
+                    print(f'Dodaję 5 do pola: ({[i[0]+X]},{[i[1]]}) za {i[0]}, {i[1]}')
+            for Y in range(-2, 3):
+                if game_state.is_in_bounds((i[0],i[1]+Y)):
+                    self.pola[i[1]+Y][i[0]].wsp += 5
+                    print(f'Dodaję 5 do pola: ({[i[0]]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ore_blocks:
-            for X in range(-1, 2):
-                for Y in range(-1, 2):
-                    if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[1]+Y][i[0]+X].wsp += 3
-                        print(f'Dodaję 3 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+            for X in range(-2, 3):
+                if game_state.is_in_bounds((i[0]+X,i[1])):
+                    (self.pola[i[1]][i[0]+X]).wsp += 3
+                    print(f'Dodaję 3 do pola: ({[i[0]+X]},{[i[1]]}) za {i[0]}, {i[1]}')
+            for Y in range(-2, 3):
+                if game_state.is_in_bounds((i[0],i[1]+Y)):
+                    self.pola[i[1]+Y][i[0]].wsp += 3
+                    print(f'Dodaję 3 do pola: ({[i[0]]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ammo:
             if game_state.is_in_bounds((i[0],i[1])):
                 self.pola[i[1]][i[0]].wsp += 20
-                print(f'Dodaję 20 do strefy: ({[i[0]]},{[i[1]]}) za {i[0]}, {i[1]}')
+                print(f'Dodaję 20 do pola: ({[i[0]]},{[i[1]]}) za {i[0]}, {i[1]}')
         for i in game_state.indestructible_blocks:
             for X in range(-1, 2):
-                for Y in range(-1, 2):
-                    if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        (self.pola[i[1]+Y][i[0]+X]).wsp += -2
-                        print(f'Dodaję -2 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+                if game_state.is_in_bounds((i[0]+X,i[1])):
+                    (self.pola[i[1]][i[0]+X]).wsp += -2
+                    print(f'Dodaję -2 do pola: ({[i[0]+X]},{[i[1]]}) za {i[0]}, {i[1]}')
+            for Y in range(-1, 2):
+                if game_state.is_in_bounds((i[0],i[1]+Y)):
+                    self.pola[i[1]+Y][i[0]].wsp += -2
+                    print(f'Dodaję -2 do pola: ({[i[0]]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for row in self.pola[::-1]:
             for block in row:
                 print("[",  block.wsp,  "]", end=" ")
