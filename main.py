@@ -72,11 +72,9 @@ class Agent:
                         self.pola[i[1]+Y][i[0]+X].wsp += 3
                         print(f'Dodaję 3 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
         for i in game_state.ammo:
-            for X in range(1):
-                for Y in range(1):
-                    if game_state.is_in_bounds((i[0]+X,i[1]+Y)):
-                        self.pola[i[1]+Y][i[0]+X].wsp += 20
-                        print(f'Dodaję 20 do strefy: ({[i[0]+X]},{[i[1]+Y]}) za {i[0]}, {i[1]}')
+            if game_state.is_in_bounds((i[0],i[1])):
+                self.pola[i[1]][i[0]].wsp += 20
+                print(f'Dodaję 20 do strefy: ({[i[0]]},{[i[1]]}) za {i[0]}, {i[1]}')
         for i in game_state.indestructible_blocks:
             for X in range(-1, 2):
                 for Y in range(-1, 2):
